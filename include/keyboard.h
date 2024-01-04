@@ -2,14 +2,16 @@
 #define KEYBOARD_H
 
 #include <stdint.h>
+#include "cpu.h"
 
 typedef struct {
     uint8_t keymap[87];
-    uint8_t keypressed[17];
-    void (* onNextKeyPress) (keyboard_t* keyboard, uint8_t);
+    uint8_t keyPressed[17];
+    void (* onNextKeyPress) (keyboard_t* keyboard, cpu_t* cpu, uint8_t);
 } keyboard_t;
 
 void initKeyBoard(keyboard_t *keyboard);
 void onNextKeyPress(keyboard_t *keyboard, uint8_t);
+void onKeyUp(keyboard_t *keyboard, uint8_t)
 
 #endif
