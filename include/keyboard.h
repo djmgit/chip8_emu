@@ -12,6 +12,6 @@ typedef struct {
 
 void initKeyBoard(keyboard_t *keyboard);
 void onNextKeyPress(keyboard_t *keyboard, uint8_t);
-void onKeyUp(keyboard_t *keyboard, uint8_t)
+void onKeyUp(keyboard_t *keyboard, uint8_t);
 
 #endif

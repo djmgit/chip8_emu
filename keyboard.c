@@ -25,7 +25,17 @@ void initKeyBoard(keyboard_t *keyboard) {
     keyboard->onNextKeyPress = NULL;
 }
 
+int isKeyValid(keyboard_t *keyboard, uint8_t keyCode) {
+    if (keyCode >= 87 || keyboard->keymap[keyCode] == 0) {
+        return 0;
+    }
+    return 1;
+}
+
 void onKeyDown(keyboard_t *keyboard, cpu_t* cpu, uint8_t keyCode) {
+    if (!isKeyValid(keyboard, keyCode)) {
+        return;
+    }
     uint8_t key = keyboard->keymap[keyCode];
     keyboard->keyPressed[key] = 1;
 
@@ -36,6 +46,9 @@ void onKeyDown(keyboard_t *keyboard, cpu_t* cpu, uint8_t keyCode) {
 }
 
 void onKeyUp(keyboard_t *keyboard, uint8_t keyCode) {
+    if (!isKeyValid(keyboard, keyCode)) {
+        return;
+    }
     uint8_t key = keyboard->keymap[keyCode];
     keyboard->keyPressed[key] = 0;
 }
