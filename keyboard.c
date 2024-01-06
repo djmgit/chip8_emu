@@ -20,7 +20,7 @@ void initKeyBoard(keyboard_t *keyboard) {
     keyboard->keymap[90] = 0xA; // Z
     keyboard->keymap[88] = 0x0; // X
     keyboard->keymap[67] = 0xB; // C
-    keyboard->keymap[86] = 0xF;  // V
+    keyboard->keymap[86] = 0xF; // V
 
     keyboard->onNextKeyPress = NULL;
 }
