@@ -23,6 +23,12 @@ void initKeyBoard(keyboard_t *keyboard) {
     keyboard->keymap[86] = 0xF; // V
 
     keyboard->onNextKeyPress = NULL;
+    uint8_t keyCount = 0;
+    for (size_t i = 0 ; i < 87; i++) {
+        if (keyboard->keymap[i] != 0) {
+            keyboard->validKeys[keyCount++] = i;
+        }
+    }
 }
 
 int isKeyValid(keyboard_t *keyboard, uint8_t keyCode) {
@@ -55,4 +61,15 @@ void onKeyUp(keyboard_t *keyboard, uint8_t keyCode) {
 
 int isKeyPressed(keyboard_t *keyboard, uint8_t key) {
     return keyboard->keyPressed[key];
+}
+
+int processKey(keyboard_t *keyboard, cpu_t *cpu) {
+    for (size_t i = 0; i < NUM_VALID_KEYS; i++) {
+        if (IsKeyDown(keyboard->validKeys[i])) {
+            onKeyDown(keyboard, cpu, keyboard->validKeys[i]);
+        }
+        if (IsKeyUp(keyboard->validKeys[i])) {
+            onKeyUp(keyboard, keyboard->validKeys[i]);
+        }
+    }
 }
