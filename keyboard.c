@@ -67,8 +67,7 @@ int processKey(keyboard_t *keyboard, cpu_t *cpu) {
     for (size_t i = 0; i < NUM_VALID_KEYS; i++) {
         if (IsKeyDown(keyboard->validKeys[i])) {
             onKeyDown(keyboard, cpu, keyboard->validKeys[i]);
-        }
-        if (IsKeyUp(keyboard->validKeys[i])) {
+        } else {
             onKeyUp(keyboard, keyboard->validKeys[i]);
         }
     }
