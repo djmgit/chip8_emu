@@ -3,6 +3,7 @@
         "math.h": "c",
         "stdlib.h": "c",
         "stdint.h": "c",
-        "keyboard.h": "c"
+        "keyboard.h": "c",
+        "cpu.h": "c"
     }
 }
