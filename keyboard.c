@@ -46,7 +46,7 @@ void onKeyDown(keyboard_t *keyboard, cpu_t* cpu, uint8_t keyCode) {
     keyboard->keyPressed[key] = 1;
 
     if (keyboard->onNextKeyPress != NULL) {
-        keyboard->onNextKeyPress(keyboard, cpu, key);
+        keyboard->onNextKeyPress(cpu, key);
         keyboard->onNextKeyPress = NULL;
     }
 }

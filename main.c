@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "cpu.h"
 #include "renderer.h"
+#include "keyboard.h"
 
 #define CHIP8_SCREEN_WIDTH 64
 #define CHIP8_SCREEN_HEIGHT 32
@@ -15,11 +16,14 @@ renderer_t renderer = {
     .display = NULL
 };
 
+keyboard_t keyboard = (keyboard_t){};
+
 int main() {
     InitWindow(CHIP8_SCREEN_WIDTH * SCALE, CHIP8_SCREEN_HEIGHT * SCALE, "CHIP8 Emulator");
     SetTargetFPS(TARGET_FPS);
-    show();
     initRenderer(&renderer);
+    initKeyBoard(&keyboard);
+    setPixel(&renderer, 0, 0); 
 
     while (!WindowShouldClose()) {
         ClearBackground(RAYWHITE);

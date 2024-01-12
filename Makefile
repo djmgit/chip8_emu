@@ -2,7 +2,7 @@ COMPILER = cc
 SOURCE_LIBS_OSX = -Iinclude/
 OPT = -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 OUT = -o chip8_emu
-CFILES = cpu.c renderer.c main.c
+CFILES = *.c
 PLATFORM := $(shell uname)
 
 ifeq ($(PLATFORM), Darwin)
