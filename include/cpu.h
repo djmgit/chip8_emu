@@ -12,6 +12,8 @@ typedef struct {
     uint16_t pc;
     uint16_t stack[24];
     uint8_t sp;
+    uint8_t delayTimer;
+    uint8_t soundTimer;
     uint8_t paused;
     uint8_t speed;
 } cpu_t;
@@ -39,5 +41,7 @@ void initCPU(cpu_t *cpu);
 void pushStack(cpu_t *cpu, uint16_t);
 uint16_t popStack(cpu_t *cpu);
 void loadSpritesIntoMemory(cpu_t *cpu);
+void loadProgramIntoMemory(cpu_t *cpu, char *filename);
+void executeInstruction(cpu_t *cpu, uint16_t instruction);
 
 #endif
