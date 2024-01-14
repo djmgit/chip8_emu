@@ -42,6 +42,8 @@ void pushStack(cpu_t *cpu, uint16_t);
 uint16_t popStack(cpu_t *cpu);
 void loadSpritesIntoMemory(cpu_t *cpu);
 void loadProgramIntoMemory(cpu_t *cpu, char *filename);
-void executeInstruction(cpu_t *cpu, uint16_t instruction);
+void executeInstruction(cpu_t *cpu, renderer_t *renderer, uint16_t instruction);
+void cycle(cpu_t *cpu, renderer_t *renderer);
+void updateTimers(cpu_t *cpu);
 
 #endif

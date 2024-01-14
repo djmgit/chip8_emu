@@ -45,15 +45,178 @@ void loadProgramIntoMemory(cpu_t *cpu, char *filename) {
     prinft("ROM successfully loaded into memory");
 }
 
-void cycle(cpu_t *cpu) {
+void updateTimers(cpu_t *cpu) {
+    cpu->delayTimer = cpu->delayTimer > 0 ? cpu->delayTimer - 1 : cpu->delayTimer;
+    cpu->soundTimer = cpu->soundTimer > 0 ? cpu->soundTimer - 1 : cpu->soundTimer;
+}
+
+void cycle(cpu_t *cpu, renderer_t *renderer) {
     for (size_t i = 0; i < cpu->speed; i++) {
         if (!cpu->paused) {
             uint16_t instruction = (cpu->memory[cpu->pc] << 8 | cpu->memory[cpu->pc + 1]);
-            executeInstruction(cpu, instruction);
+            executeInstruction(cpu, renderer, instruction);
         }
     }
+
+    if (!cpu->paused) {
+        updateTimers(cpu);
+    }
+
+    render(renderer);
 }
 
-void executeInstruction(cpu_t *cpu, uint16_t instruction) {
+void executeInstruction(cpu_t *cpu, renderer_t *renderer, uint16_t instruction) {
+
+    cpu->pc += 2;
+
+    uint8_t x = (instruction & 0x0f00) >> 8;
+    uint8_t y = (instruction & 0x00f0) >> 4;
+
+    switch(instruction & 0xf000) {
+        case 0x0000:
+            switch(instruction) {
+                case 0x00e0:
+                    clear(renderer);
+                    break;
+                case 0x00ee:
+                    cpu->pc = popStack(cpu);
+                    break;
+            }
+            break;
+        
+        case 0x1000:
+            cpu->pc = (instruction & 0xfff);
+            break;
+        
+        case 0x2000:
+            pushStack(cpu, cpu->pc);
+            cpu->pc = (instruction & 0xfff);
+            break;
+        
+        case 0x3000:
+            if (cpu->registers[x] == (instruction & 0xff)) {
+                cpu->pc += 2;
+            }
+            break;
+        
+        case 0x4000:
+            if (cpu->registers[x] != (instruction & 0xff)) {
+                cpu->pc += 2;
+            }
+            break;
+        
+        case 0x5000:
+            if (cpu->registers[x] == cpu->registers[y]) {
+                cpu->pc += 2;
+            }
+            break;
+        
+        case 0x6000:
+            cpu->registers[x] = (instruction & 0xff);
+            break;
+        
+        case 0x7000:
+            cpu->registers[x] += (instruction & 0xff);
+            break;
+        
+        case 0x8000:
+            switch(instruction & 0xf){
+                case 0x0:
+                    cpu->registers[x] = cpu->registers[y];
+                    break;
+                
+                case 0x1:
+                    cpu->registers[x] |= cpu->registers[y];
+                    break;
+                
+                case 0x2:
+                    cpu->registers[x] &= cpu->registers[y];
+                    break;
+                
+                case 0x3:
+                    cpu->registers[x] ^= cpu->registers[y];
+                    break;
+                
+                case 0x4:
+                    uint16_t sum = cpu->registers[x] + cpu->registers[y];
+                    cpu->registers[0xf] = 0;
+                    if (sum > 0xff) {
+                        cpu->registers[0xf] = 1;
+                    }
+                    cpu->registers[x] = (uint8_t)sum;
+                    break;
+                
+                case 0x5:
+                    break;
+                
+                case 0x6:
+                    break;
+                
+                case 0x7:
+                    break;
+                
+                case 0xe:
+                    break;
+            break;
+        }
+
+        case 0x9000:
+            break;
+        
+        case 0xa000:
+            break;
+        
+        case 0xb000:
+            break;
+        
+        case 0xc000:
+            break;
+        
+        case 0xd000:
+            break;
+        
+        case 0xe000:
+            switch(instruction & 0xff) {
+                case 0x9e:
+                    break;
+                
+                case 0xa1:
+                    break;
+            }
+            break;
+        
+        case 0xf000:
+            switch(instruction & 0xff) {
+                case 0x07:
+                    break;
+                
+                case 0x0a:
+                    break;
+                
+                case 0x15:
+                    break;
+                
+                case 0x18:
+                    break;
+                
+                case 0x1E:
+                    break;
+                
+                case 0x29:
+                    break;
+                
+                case 0x33:
+                    break;
+                
+                case 0x55:
+                    break;
+                
+                case 0x65:
+                    break;
+            }
+            break;
+
+        break;
+    }
 
 }
