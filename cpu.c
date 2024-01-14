@@ -143,19 +143,37 @@ void executeInstruction(cpu_t *cpu, renderer_t *renderer, uint16_t instruction) 
                     if (sum > 0xff) {
                         cpu->registers[0xf] = 1;
                     }
-                    cpu->registers[x] = (uint8_t)sum;
+                    cpu->registers[x] = sum;
                     break;
                 
                 case 0x5:
+                    cpu->registers[0xf] = 1;
+                    
+                    if (cpu->registers[x] <= cpu->registers[y]) {
+                        cpu->registers[0xf] = 0;
+                    }
+
+                    cpu->registers[x] -= cpu->registers[y];
                     break;
                 
                 case 0x6:
+                    cpu->registers[0xf] = (cpu->registers[x] & 0x1);
+                    cpu->registers[x] >>= 1;
                     break;
                 
                 case 0x7:
+                    cpu->registers[0xf] = 0;
+                    
+                    if (cpu->registers[y] > cpu->registers[x]) {
+                        cpu->registers[0xf] = 1;
+                    }
+
+                    cpu->registers[x] = cpu->registers[y] - cpu->registers[x];
                     break;
                 
                 case 0xe:
+                    cpu->registers[0xf] = (cpu->registers[x] & 0x80);
+                    cpu->registers[x] <<= 1;
                     break;
             break;
         }
