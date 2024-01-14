@@ -179,12 +179,17 @@ void executeInstruction(cpu_t *cpu, renderer_t *renderer, uint16_t instruction) 
         }
 
         case 0x9000:
+            if (cpu->registers[x] != cpu->registers[y]) {
+                cpu->pc += 2;
+            }
             break;
         
         case 0xa000:
+            cpu->i = (instruction & 0xfff);
             break;
         
         case 0xb000:
+            cpu->pc = (cpu->registers[0x0] + (instruction & 0xfff));
             break;
         
         case 0xc000:
