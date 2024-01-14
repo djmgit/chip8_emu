@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 #define NUM_FONT_SPRITES 80
+#define SPRITE_WIDTH 8
 
 typedef struct {
     uint8_t memory[4096];

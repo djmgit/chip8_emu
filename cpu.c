@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <errno.h>
+#include <stdlib.h>
+#include <time.h>
 #include "cpu.h"
 #include "renderer.h"
 #include "keyboard.h"
@@ -10,6 +12,7 @@ void initCPU(cpu_t *cpu) {
     cpu->sp = -1;
     cpu->paused = 0;
     cpu->speed = 10;
+    srand(time(0));
 
     loadSpritesIntoMemory(cpu);
 }
@@ -193,9 +196,25 @@ void executeInstruction(cpu_t *cpu, renderer_t *renderer, uint16_t instruction) 
             break;
         
         case 0xc000:
+            uint8_t random_num = rand() % 256;
+            cpu->registers[x] = (random_num & (instruction & 0xff));
             break;
         
         case 0xd000:
+            uint8_t height = (instruction & 0xf);
+            cpu->registers[0xf] = 0;
+
+            for (size_t row = 0; row < height; row++) {
+                uint8_t sprite_row = cpu->memory[cpu->i + row];
+                for (size_t col = 0; col < SPRITE_WIDTH; col++) {
+                    if (sprite_row & 0x80 > 0) {
+                        if (setPixel(renderer, cpu->registers[x] + col, cpu->registers[y] + row)) {
+                            cpu->registers[0xf] = 1;
+                        }
+                    }
+                    sprite_row <<= 1;
+                }
+            }
             break;
         
         case 0xe000:
