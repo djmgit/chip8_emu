@@ -72,3 +72,8 @@ void processKey(keyboard_t *keyboard, cpu_t *cpu) {
         }
     }
 }
+
+void onNextKeyPress(cpu_t *cpu, uint8_t key) {
+    cpu->registers[cpu->key_register] = key;
+    cpu->paused = 0;
+}

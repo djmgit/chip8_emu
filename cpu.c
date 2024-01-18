@@ -53,11 +53,11 @@ void updateTimers(cpu_t *cpu) {
     cpu->soundTimer = cpu->soundTimer > 0 ? cpu->soundTimer - 1 : cpu->soundTimer;
 }
 
-void cycle(cpu_t *cpu, renderer_t *renderer) {
+void cycle(cpu_t *cpu, keyboard_t *keyboard, renderer_t *renderer) {
     for (size_t i = 0; i < cpu->speed; i++) {
         if (!cpu->paused) {
             uint16_t instruction = (cpu->memory[cpu->pc] << 8 | cpu->memory[cpu->pc + 1]);
-            executeInstruction(cpu, renderer, instruction);
+            executeInstruction(cpu, renderer, keyboard, instruction);
         }
     }
 
@@ -68,7 +68,7 @@ void cycle(cpu_t *cpu, renderer_t *renderer) {
     render(renderer);
 }
 
-void executeInstruction(cpu_t *cpu, renderer_t *renderer, uint16_t instruction) {
+void executeInstruction(cpu_t *cpu, renderer_t *renderer, keyboard_t *keyboard, uint16_t instruction) {
 
     cpu->pc += 2;
 
@@ -220,9 +220,15 @@ void executeInstruction(cpu_t *cpu, renderer_t *renderer, uint16_t instruction) 
         case 0xe000:
             switch(instruction & 0xff) {
                 case 0x9e:
+                    if (isKeyPressed(keyboard, cpu->registers[x])) {
+                        cpu->pc += 2;
+                    }
                     break;
                 
                 case 0xa1:
+                    if (!isKeyPressed(keyboard, cpu->registers[x])) {
+                        cpu->pc += 2;
+                    }
                     break;
             }
             break;
@@ -230,24 +236,35 @@ void executeInstruction(cpu_t *cpu, renderer_t *renderer, uint16_t instruction) 
         case 0xf000:
             switch(instruction & 0xff) {
                 case 0x07:
+                    cpu->registers[x] = cpu->delayTimer;
                     break;
                 
                 case 0x0a:
+                    cpu->paused = 1;
+                    cpu->key_register = x;
+                    keyboard->onNextKeyPress = onNextKeyPress;
                     break;
                 
                 case 0x15:
+                    cpu->delayTimer = cpu->registers[x];
                     break;
                 
                 case 0x18:
+                    cpu->soundTimer = cpu->registers[x];
                     break;
                 
                 case 0x1E:
+                    cpu->i += cpu->registers[x];
                     break;
                 
                 case 0x29:
+                    cpu->i = cpu->registers[x] * 5;
                     break;
                 
                 case 0x33:
+                    cpu->memory[cpu->i] = (int)(cpu->registers[x] / 100);
+                    cpu->memory[cpu->i+1] = (int)((cpu->registers[x] % 100) / 10);
+                    cpu->memory[cpu->i+2] = (int)(cpu->registers[x] % 10); 
                     break;
                 
                 case 0x55:

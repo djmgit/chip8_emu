@@ -17,6 +17,7 @@ typedef struct {
     uint8_t soundTimer;
     uint8_t paused;
     uint8_t speed;
+    uint8_t key_register;
 } cpu_t;
 
 const uint8_t SPRITES[] = {
@@ -43,8 +44,8 @@ void pushStack(cpu_t *cpu, uint16_t);
 uint16_t popStack(cpu_t *cpu);
 void loadSpritesIntoMemory(cpu_t *cpu);
 void loadProgramIntoMemory(cpu_t *cpu, char *filename);
-void executeInstruction(cpu_t *cpu, renderer_t *renderer, uint16_t instruction);
-void cycle(cpu_t *cpu, renderer_t *renderer);
+void executeInstruction(cpu_t *cpu, renderer_t *renderer, keyboard_t *keyboard, uint16_t instruction);
+void cycle(cpu_t *cpu, keyboard_t *keyboard, renderer_t *renderer);
 void updateTimers(cpu_t *cpu);
 
 #endif
