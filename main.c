@@ -28,11 +28,10 @@ int main(int argc, char *argv[]) {
     if (argc == 2) {
         loadProgramIntoMemory(&cpu, argv[1]);
     }
-    setPixel(&renderer, 0, 0); 
 
     while (!WindowShouldClose()) {
         ClearBackground(RAYWHITE);
-
+        cycle(&cpu, &keyboard, &renderer);
         BeginDrawing();
             render(&renderer);
         EndDrawing();
