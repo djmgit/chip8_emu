@@ -263,18 +263,23 @@ void executeInstruction(cpu_t *cpu, renderer_t *renderer, keyboard_t *keyboard, 
                 
                 case 0x33:
                     cpu->memory[cpu->i] = (int)(cpu->registers[x] / 100);
-                    cpu->memory[cpu->i+1] = (int)((cpu->registers[x] % 100) / 10);
-                    cpu->memory[cpu->i+2] = (int)(cpu->registers[x] % 10); 
+                    cpu->memory[cpu->i + 1] = (int)((cpu->registers[x] % 100) / 10);
+                    cpu->memory[cpu->i + 2] = (int)(cpu->registers[x] % 10);
                     break;
                 
                 case 0x55:
+                    for (size_t register_index = 0; register_index <= x; register_index++) {
+                        cpu->memory[cpu->i + register_index] = cpu->registers[register_index];
+                    }
                     break;
                 
                 case 0x65:
+                    for (size_t register_index = 0; register_index <= x; register_index++) {
+                        cpu->registers[register_index] = cpu->memory[cpu->i + register_index];
+                    }
                     break;
             }
             break;
-
         break;
     }
 
