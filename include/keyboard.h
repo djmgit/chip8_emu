@@ -10,7 +10,7 @@ typedef struct {
     uint8_t keymap[KEY_ARRAY_MAX];
     uint8_t keyPressed[17];
     uint8_t validKeys[17];
-    void (* onNextKeyPress) (cpu_t* cpu, uint8_t);
+    void (* onNextKeyPress) (cpu_t *cpu, uint8_t);
 } keyboard_t;
 
 void initKeyBoard(keyboard_t *keyboard);

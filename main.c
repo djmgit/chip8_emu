@@ -1,8 +1,8 @@
 #include "raylib.h"
 #include <stdio.h>
-#include "cpu.h"
 #include "renderer.h"
 #include "keyboard.h"
+#include "cpu.h"
 
 #define CHIP8_SCREEN_WIDTH 64
 #define CHIP8_SCREEN_HEIGHT 32

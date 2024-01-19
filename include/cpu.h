@@ -2,6 +2,8 @@
 #define CPU_H
 
 #include <stdint.h>
+#include "keyboard.h"
+#include "renderer.h"
 
 #define NUM_FONT_SPRITES 80
 #define SPRITE_WIDTH 8

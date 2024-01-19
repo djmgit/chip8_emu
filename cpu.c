@@ -2,9 +2,9 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <time.h>
-#include "cpu.h"
 #include "renderer.h"
 #include "keyboard.h"
+#include "cpu.h"
 
 void initCPU(cpu_t *cpu) {
     cpu->i = 0;
@@ -44,7 +44,7 @@ void loadProgramIntoMemory(cpu_t *cpu, char *filename) {
         cpu->memory[0x200 + loc] = c_byte;
         loc++;
     }
-    fclose(filename);
+    fclose(fp);
     prinft("ROM successfully loaded into memory");
 }
 
@@ -141,13 +141,15 @@ void executeInstruction(cpu_t *cpu, renderer_t *renderer, keyboard_t *keyboard, 
                     break;
                 
                 case 0x4:
-                    uint16_t sum = cpu->registers[x] + cpu->registers[y];
-                    cpu->registers[0xf] = 0;
-                    if (sum > 0xff) {
-                        cpu->registers[0xf] = 1;
+                    {
+                        uint16_t sum = cpu->registers[x] + cpu->registers[y];
+                        cpu->registers[0xf] = 0;
+                        if (sum > 0xff) {
+                            cpu->registers[0xf] = 1;
+                        }
+                        cpu->registers[x] = sum;
+                        break;
                     }
-                    cpu->registers[x] = sum;
-                    break;
                 
                 case 0x5:
                     cpu->registers[0xf] = 1;
@@ -196,27 +198,31 @@ void executeInstruction(cpu_t *cpu, renderer_t *renderer, keyboard_t *keyboard, 
             break;
         
         case 0xc000:
-            uint8_t random_num = rand() % 256;
-            cpu->registers[x] = (random_num & (instruction & 0xff));
-            break;
+            {
+                uint8_t random_num = rand() % 256;
+                cpu->registers[x] = (random_num & (instruction & 0xff));
+                break;
+            }
         
         case 0xd000:
-            uint8_t height = (instruction & 0xf);
-            cpu->registers[0xf] = 0;
+            {
+                uint8_t height = (instruction & 0xf);
+                cpu->registers[0xf] = 0;
 
-            for (size_t row = 0; row < height; row++) {
-                uint8_t sprite_row = cpu->memory[cpu->i + row];
-                for (size_t col = 0; col < SPRITE_WIDTH; col++) {
-                    if (sprite_row & 0x80 > 0) {
-                        if (setPixel(renderer, cpu->registers[x] + col, cpu->registers[y] + row)) {
-                            cpu->registers[0xf] = 1;
+                for (size_t row = 0; row < height; row++) {
+                    uint8_t sprite_row = cpu->memory[cpu->i + row];
+                    for (size_t col = 0; col < SPRITE_WIDTH; col++) {
+                        if (sprite_row & 0x80 > 0) {
+                            if (setPixel(renderer, cpu->registers[x] + col, cpu->registers[y] + row)) {
+                                cpu->registers[0xf] = 1;
+                            }
                         }
+                        sprite_row <<= 1;
                     }
-                    sprite_row <<= 1;
                 }
+                break;
             }
-            break;
-        
+
         case 0xe000:
             switch(instruction & 0xff) {
                 case 0x9e:
