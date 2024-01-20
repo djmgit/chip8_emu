@@ -4,7 +4,7 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-typedef struct {
+typedef struct renderer_t {
     uint8_t cols;
     uint8_t rows;
     uint8_t scale;

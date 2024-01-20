@@ -6,7 +6,8 @@
 #include <stdint.h>
 #include "cpu.h"
 
-typedef struct {
+typedef struct cpu_t cpu_t;
+typedef struct keyboard_t {
     uint8_t keymap[KEY_ARRAY_MAX];
     uint8_t keyPressed[17];
     uint8_t validKeys[17];

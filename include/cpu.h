@@ -8,7 +8,8 @@
 #define NUM_FONT_SPRITES 80
 #define SPRITE_WIDTH 8
 
-typedef struct {
+typedef struct keyboard_t keyboard_t;
+typedef struct cpu_t {
     uint8_t memory[4096];
     uint8_t registers[16];
     uint16_t i;
