@@ -7,14 +7,17 @@
 
 #define NUM_FONT_SPRITES 80
 #define SPRITE_WIDTH 8
+#define MEMORY_SIZE 4096
+#define NUM_REGISTERS 16
+#define STACK_SIZE 24
 
 typedef struct keyboard_t keyboard_t;
 typedef struct cpu_t {
-    uint8_t memory[4096];
-    uint8_t registers[16];
+    uint8_t memory[MEMORY_SIZE];
+    uint8_t registers[NUM_REGISTERS];
     uint16_t i;
     uint16_t pc;
-    uint16_t stack[24];
+    uint16_t stack[STACK_SIZE];
     uint8_t sp;
     uint8_t delayTimer;
     uint8_t soundTimer;

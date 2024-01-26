@@ -36,6 +36,7 @@ void clear(renderer_t *renderer) {
 }
 
 void render(renderer_t *renderer) {
+    ClearBackground(RAYWHITE);
     for(size_t i = 0; i < (renderer->cols * renderer->rows); i++) {
         if (!renderer->display[i]) {
             continue;

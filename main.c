@@ -33,7 +33,6 @@ int main(int argc, char *argv[]) {
 
     while (!WindowShouldClose()) {
         processKey(&keyboard, &cpu);
-        ClearBackground(RAYWHITE);
         cycle(&cpu, &keyboard, &renderer);
         BeginDrawing();
             render(&renderer);

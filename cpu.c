@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <assert.h>
 #include "renderer.h"
 #include "keyboard.h"
 #include "cpu.h"
@@ -32,13 +33,18 @@ void initCPU(cpu_t *cpu) {
     cpu->sp = -1;
     cpu->paused = 0;
     cpu->speed = 10;
+    cpu->delayTimer = 0;
+    cpu->soundTimer = 0;
+    memset(cpu->memory, 0, MEMORY_SIZE);
+    memset(cpu->registers, 0, NUM_REGISTERS);
+    memset(cpu->stack, 0, STACK_SIZE);
     srand(time(0));
 
     loadSpritesIntoMemory(cpu);
 }
 
 void pushStack(cpu_t *cpu, uint16_t val) {
-    cpu->stack[++cpu->sp] = val;
+    cpu->stack[++(cpu->sp)] = val;
 }
 
 uint16_t popStack(cpu_t *cpu) {
@@ -55,7 +61,7 @@ void loadProgramIntoMemory(cpu_t *cpu, char *filename) {
     FILE *fp;
     fp = fopen(filename, "rb");
     if (fp == NULL) {
-        fprintf(stderr, "Failed to openfile: %s", strerror(errno));
+        fprintf(stderr, "Failed to openfile: %s\n", strerror(errno));
         exit(EXIT_FAILURE);
     }
     int c_byte;
@@ -65,7 +71,7 @@ void loadProgramIntoMemory(cpu_t *cpu, char *filename) {
         loc++;
     }
     fclose(fp);
-    printf("ROM successfully loaded into memory");
+    printf("ROM successfully loaded into memory\n\n");
 }
 
 void updateTimers(cpu_t *cpu) {
@@ -85,7 +91,7 @@ void cycle(cpu_t *cpu, keyboard_t *keyboard, renderer_t *renderer) {
         updateTimers(cpu);
     }
 
-    render(renderer);
+    //render(renderer);
 }
 
 void executeInstruction(cpu_t *cpu, renderer_t *renderer, keyboard_t *keyboard, uint16_t instruction) {
@@ -162,7 +168,7 @@ void executeInstruction(cpu_t *cpu, renderer_t *renderer, keyboard_t *keyboard, 
                 
                 case 0x4:
                     {
-                        uint16_t sum = cpu->registers[x] + cpu->registers[y];
+                        uint16_t sum = (cpu->registers[x] += cpu->registers[y]);
                         cpu->registers[0xf] = 0;
                         if (sum > 0xff) {
                             cpu->registers[0xf] = 1;
@@ -292,19 +298,20 @@ void executeInstruction(cpu_t *cpu, renderer_t *renderer, keyboard_t *keyboard, 
                     break;
                 
                 case 0x55:
-                    for (size_t register_index = 0; register_index <= x; register_index++) {
-                        cpu->memory[cpu->i + register_index] = cpu->registers[register_index];
+                    for (size_t registerIndex = 0; registerIndex <= x; registerIndex++) {
+                        cpu->memory[cpu->i + registerIndex] = cpu->registers[registerIndex];
                     }
                     break;
                 
                 case 0x65:
-                    for (size_t register_index = 0; register_index <= x; register_index++) {
-                        cpu->registers[register_index] = cpu->memory[cpu->i + register_index];
+                    for (size_t registerIndex = 0; registerIndex <= x; registerIndex++) {
+                        cpu->registers[registerIndex] = cpu->memory[cpu->i + registerIndex];
                     }
                     break;
             }
             break;
-        break;
+        default:
+            assert (1==0);
     }
 
 }
