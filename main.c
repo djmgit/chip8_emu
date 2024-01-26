@@ -21,10 +21,12 @@ cpu_t cpu = (cpu_t){};
 
 int main(int argc, char *argv[]) {
     InitWindow(CHIP8_SCREEN_WIDTH * SCALE, CHIP8_SCREEN_HEIGHT * SCALE, "CHIP8 Emulator");
+    //InitWindow(320, 160, "CHIP8 Emulator");
     SetTargetFPS(TARGET_FPS);
     initRenderer(&renderer);
     initKeyBoard(&keyboard);
     initCPU(&cpu);
+    //setPixel(&renderer, 63, 0);
     if (argc == 2) {
         loadProgramIntoMemory(&cpu, argv[1]);
     }

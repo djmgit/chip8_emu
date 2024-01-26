@@ -228,7 +228,7 @@ void executeInstruction(cpu_t *cpu, renderer_t *renderer, keyboard_t *keyboard, 
                 cpu->registers[0xf] = 0;
 
                 for (size_t row = 0; row < height; row++) {
-                    uint8_t sprite_row = cpu->memory[cpu->i + row];
+                    uint8_t sprite_row = cpu->memory[cpu->i + (uint16_t)row];
                     for (size_t col = 0; col < SPRITE_WIDTH; col++) {
                         if ((sprite_row & 0x80) > 0) {
                             if (setPixel(renderer, cpu->registers[x] + col, cpu->registers[y] + row)) {

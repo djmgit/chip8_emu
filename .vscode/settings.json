@@ -5,6 +5,8 @@
         "stdint.h": "c",
         "keyboard.h": "c",
         "cpu.h": "c",
-        "renderer.h": "c"
+        "renderer.h": "c",
+        "string.h": "c",
+        "stdio.h": "c"
     }
 }

@@ -8,8 +8,8 @@
 void initRenderer(renderer_t *renderer) {
     renderer->screenWidth = renderer->screenWidth * renderer->scale;
     renderer->screenHeight = renderer->screenHeight * renderer->scale;
-    renderer->display = (uint8_t *)malloc(sizeof(uint8_t) * renderer->cols * renderer->rows);
-    memset(renderer->display, 0, renderer->rows * renderer->cols);
+    renderer->display = (uint8_t *)malloc(sizeof(uint8_t) * (renderer->cols) * (renderer->rows));
+    memset(renderer->display, 0, (renderer->rows) * (renderer->cols));
 }
 
 uint8_t setPixel(renderer_t *renderer, uint8_t x, uint8_t y) {
@@ -32,7 +32,7 @@ uint8_t setPixel(renderer_t *renderer, uint8_t x, uint8_t y) {
 }
 
 void clear(renderer_t *renderer) {
-    memset(renderer->display, 0, renderer->cols * renderer->rows);
+    memset(renderer->display, 0, (renderer->cols) * (renderer->rows));
 }
 
 void render(renderer_t *renderer) {
@@ -40,8 +40,8 @@ void render(renderer_t *renderer) {
         if (!renderer->display[i]) {
             continue;
         }
-        uint8_t x = (i % renderer->cols) * renderer->scale;
-        uint8_t y = floor(i / renderer->cols) * renderer->scale;
+        uint16_t x = (i % renderer->cols) * (renderer->scale);
+        uint16_t y = (i / renderer->cols) * (renderer->scale);
         DrawRectangle(x, y, renderer->scale, renderer->scale, (Color){0,0,0,255});
     }
 }
