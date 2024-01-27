@@ -44,11 +44,14 @@ void initCPU(cpu_t *cpu) {
 }
 
 void pushStack(cpu_t *cpu, uint16_t val) {
-    cpu->stack[++(cpu->sp)] = val;
+    cpu->sp = cpu->sp + 1;
+    cpu->stack[cpu->sp] = val;
 }
 
 uint16_t popStack(cpu_t *cpu) {
-    return cpu->stack[cpu->sp--];
+    uint16_t val = cpu->stack[cpu->sp];
+    cpu->sp = cpu->sp - 1;
+    return val;
 }
 
 void loadSpritesIntoMemory(cpu_t *cpu) {
@@ -292,9 +295,9 @@ void executeInstruction(cpu_t *cpu, renderer_t *renderer, keyboard_t *keyboard, 
                     break;
                 
                 case 0x33:
-                    cpu->memory[cpu->i] = (int)(cpu->registers[x] / 100);
-                    cpu->memory[cpu->i + 1] = (int)((cpu->registers[x] % 100) / 10);
-                    cpu->memory[cpu->i + 2] = (int)(cpu->registers[x] % 10);
+                    cpu->memory[cpu->i] = (uint8_t)(cpu->registers[x] / 100);
+                    cpu->memory[cpu->i + 1] = (uint8_t)((cpu->registers[x] % 100) / 10);
+                    cpu->memory[cpu->i + 2] = (uint8_t)(cpu->registers[x] % 10);
                     break;
                 
                 case 0x55:
