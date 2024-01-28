@@ -126,13 +126,13 @@ void executeInstruction(cpu_t *cpu, renderer_t *renderer, keyboard_t *keyboard, 
             break;
         
         case 0x3000:
-            if (cpu->registers[x] == (instruction & 0xff)) {
+            if (cpu->registers[x] == (uint8_t)(instruction & 0xff)) {
                 cpu->pc += 2;
             }
             break;
         
         case 0x4000:
-            if (cpu->registers[x] != (instruction & 0xff)) {
+            if (cpu->registers[x] != (uint8_t)(instruction & 0xff)) {
                 cpu->pc += 2;
             }
             break;
@@ -144,11 +144,11 @@ void executeInstruction(cpu_t *cpu, renderer_t *renderer, keyboard_t *keyboard, 
             break;
         
         case 0x6000:
-            cpu->registers[x] = (instruction & 0xff);
+            cpu->registers[x] = (uint8_t)(instruction & 0xff);
             break;
         
         case 0x7000:
-            cpu->registers[x] += (instruction & 0xff);
+            cpu->registers[x] += (uint8_t)(instruction & 0xff);
             break;
         
         case 0x8000:
@@ -176,7 +176,7 @@ void executeInstruction(cpu_t *cpu, renderer_t *renderer, keyboard_t *keyboard, 
                         if (sum > 0xff) {
                             cpu->registers[0xf] = 1;
                         }
-                        cpu->registers[x] = (uint8_t)sum;
+                        cpu->registers[x] = (uint8_t)(sum & 0xff);
                         break;
                     }
                 
@@ -204,7 +204,7 @@ void executeInstruction(cpu_t *cpu, renderer_t *renderer, keyboard_t *keyboard, 
                     break;
                 
                 case 0xe:
-                    cpu->registers[0xf] = (cpu->registers[x] & 0x80);
+                    cpu->registers[0xf] = (cpu->registers[x] >> 7);
                     cpu->registers[x] <<= 1;
                     break;
             break;
