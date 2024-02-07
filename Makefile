@@ -1,6 +1,7 @@
 COMPILER = cc
 SOURCE_LIBS_OSX = -Iinclude/
 OPT = -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+DEBUG_OPT = -g
 OUT = -o chip8_emu
 CFILES = *.c
 PLATFORM := $(shell uname)
@@ -13,6 +14,9 @@ endif
 
 build:
 	$(COMPILER) $(SOURCE_LIBS_OSX) $(CFILES) $(OUT) $(OPT)
+
+debug-build:
+	$(COMPILER) $(DEBUG_OPT) $(SOURCE_LIBS_OSX) $(CFILES) $(OUT) $(OPT)
 
 run:
 	./chip8_emu

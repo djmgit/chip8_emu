@@ -207,8 +207,8 @@ void executeInstruction(cpu_t *cpu, renderer_t *renderer, keyboard_t *keyboard, 
                     cpu->registers[0xf] = (cpu->registers[x] >> 7);
                     cpu->registers[x] <<= 1;
                     break;
+            }
             break;
-        }
 
         case 0x9000:
             if (cpu->registers[x] != cpu->registers[y]) {
